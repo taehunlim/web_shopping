@@ -7,10 +7,13 @@ dotenv.config();
 
 require('./db');
 
-app.use(morgan('dev'));
+const userRouter = require('./route/user');
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : false}));
+app.use(morgan('dev'));
 
+app.use('/user', userRouter);
 
-const port =  5000;
-app.listen(process.env.PORT || 6000, () => console.log(`server running on port ${port}`));
+const PORT =  process.env.PORT || 6000
+app.listen(PORT, () => console.log(`server running on port ${PORT}`));

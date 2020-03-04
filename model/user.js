@@ -4,10 +4,21 @@ const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema(
     {
-        name : {},
-        email : {},
-        password : {},
-        avatar : {}
+        name : {
+            type : String,
+            required :true
+        },
+        email : {
+            type : String,
+            required :true
+        },
+        password : {
+            type : String,
+            required :true
+        },
+        avatar : {
+            type : String
+        }
     },
 
     {
@@ -27,7 +38,7 @@ userSchema.pre("save", async function (next) {
         });
         this.avatar = avatar;
 
-        const salt = await bcrypt.salt(10);
+        const salt = await bcrypt.genSalt(10);
         const passwordHash = await bcrypt.hash(this.password, salt);
         this.password = passwordHash;
 
@@ -42,4 +53,4 @@ userSchema.pre("save", async function (next) {
 });
 
 
-module.export = mongoose.model('user', userSchema);
+module.exports = mongoose.model('user', userSchema);
