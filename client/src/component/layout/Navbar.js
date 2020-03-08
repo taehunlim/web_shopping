@@ -1,8 +1,7 @@
 import React, {Component} from "react";
 import {Link} from "react-router-dom";
-import Register from "../auth/Register";
 
-class Navibar extends Component {
+class Navbar extends Component {
     render() {
         return (
             <nav className="navbar navbar-expand-sm navbar-dark bg-dark mb-4">
@@ -40,4 +39,4 @@ class Navibar extends Component {
     }
 };
 
-export default Navibar;
+export default Navbar;
