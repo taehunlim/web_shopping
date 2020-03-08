@@ -1,5 +1,6 @@
 import React, {Component} from "react";
 import {Button} from "reactstrap";
+import axios from 'axios';
 
 
 class Login extends Component {
@@ -24,7 +25,15 @@ class Login extends Component {
 
     onSubmit =(e) => {
         e.preventDefault();
-        console.log(this.state);
+        const newUser = {
+            email : this.state.email,
+            password : this.state.password
+        };
+
+        axios
+            .post('/user/login', newUser)
+            .then(user => console.log(user.data))
+            .catch(err => console.log(err.message));
     }
 
     render() {

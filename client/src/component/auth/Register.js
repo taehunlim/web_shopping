@@ -1,5 +1,8 @@
 import React, {Component} from "react";
-import {Button} from 'reactstrap'
+import {Button} from 'reactstrap';
+import axios from 'axios';
+
+
 class Register extends Component{
     constructor() {
         super();
@@ -14,11 +17,24 @@ class Register extends Component{
 
     SignupChange = (e) => {
         this.setState({[e.target.name] : e.target.value })
-    }
+    };
 
     onSubmit = (e) => {
-        e.preventDefault();
-        console.log(this.state);
+        const newUser = {
+            name : this.state.name,
+            email : this.state.email,
+            password : this.state.password,
+            password2 : this.state.password2
+        };
+
+        console.log(newUser)
+
+        axios
+            .post('/user/signup', newUser)
+            .then(user => console.log(user.data))
+            .catch(err => console.log(err.message))
+
+
     }
 
 
