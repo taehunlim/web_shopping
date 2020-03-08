@@ -5,6 +5,8 @@ const bcrypt = require('bcryptjs');
 
 
 const userModel = require('../model/user');
+const registerValidation = require('../validation/register');
+const loginValidation = require('../validation/login');
 
 
 // @route   POST api/user/signup
@@ -12,16 +14,21 @@ const userModel = require('../model/user');
 // @access  public
 router.post('/signup', (req, res) => {
 
+    const {errors, isValid} = registerValidation(req.body);
+
     const {name, email, password} = req.body;
+
+    if(!isValid) {
+        return res.status(400).json(errors);
+    }
 
     userModel
         .findOne({email})
         .exec()
         .then(user => {
             if(user) {
-                return res.status(500).json({
-                    msg : "the email already exist"
-                });
+                errors.email = "the email already exist"
+                return res.status(500).json(errors)
             }
             else {
                 const newUser = new userModel({
@@ -47,16 +54,21 @@ router.post('/signup', (req, res) => {
 // @access  public
 router.post('/login', (req, res) => {
 
+    const {errors, isValid} = loginValidation(req.body);
+
     const {name, email, password} = req.body;
+
+    if(!isValid) {
+        return res.status(400).json(errors);
+    }
 
     userModel
         .findOne({email})
         .exec()
         .then(user => {
             if(!user) {
-                return res.status(500).json({
-                    msg : "the email dose not exist"
-                });
+                errors.email = 'the email dose not exist'
+                return res.status(500).json(errors);
             }
             else {
                 bcrypt
@@ -76,9 +88,8 @@ router.post('/login', (req, res) => {
                                 });
                         }
                         else {
-                            res.status(500).json({
-                                msg : "password incorrect"
-                            });
+                            errors.password = 'The password incorrect';
+                            res.status(500).json(errors);
                         }
                     })
                     .catch(err => res.json(err));
